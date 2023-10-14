@@ -17,7 +17,7 @@ On se contentera de méthodes pré-réseaux de neurones. Nos features sont expli
 La codebase doit fournir les entry points suivant:
 - Un entry point pour train sur une "task", prenant en entrée le path aux données de train et dumpant le modèle dans "model_dump" 
 ```
-python src/main.py train --task=is_comic_video --input_filename=data/raw/train.csv --model_dump_filename=models/model.json
+python src/main.py train --task=is_comic_video --input_filename=src/data/raw/train.csv --model_dump_filename=src/models/model.json
 ```
 - Un entry point pour predict sur une "task", prenant en entrée le path au modèle dumpé, le path aux données à prédire et outputtant dans un csv les prédictions
 ```
