@@ -2,9 +2,9 @@ import click
 import numpy as np
 from sklearn.model_selection import cross_val_score
 
-from src.data.make_dataset import make_dataset
-from src.features.make_features import make_features
-from src.model.main import make_model
+from data.make_dataset import make_dataset
+from features.make_features import make_features
+from model.main import make_model
 
 @click.group()
 def cli():
@@ -17,7 +17,7 @@ def cli():
 @click.option("--model_dump_filename", default="models/dump.json", help="File to dump model")
 def train(task, input_filename, model_dump_filename):
     df = make_dataset(input_filename)
-    X, y = make_features(df)
+    X, y = make_features(df, task)
 
     model = make_model()
     model.fit(X, y)
