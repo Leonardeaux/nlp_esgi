@@ -17,7 +17,7 @@ On se contentera de méthodes pré-réseaux de neurones. Nos features sont expli
 La codebase doit fournir les entry points suivant:
 - Un entry point pour train sur une "task", prenant en entrée le path aux données de train et dumpant le modèle dans "model_dump" 
 ```
-python src/main.py train --task=is_comic_video --input_filename=src/data/raw/train.csv --model_dump_filename=src/models/model.json
+python src/main.py train --task=is_comic_video --input_filename=src/data/raw/train.csv --model_dump_filename=src/model/model.json
 ```
 - Un entry point pour predict sur une "task", prenant en entrée le path au modèle dumpé, le path aux données à prédire et outputtant dans un csv les prédictions
 ```
@@ -46,7 +46,7 @@ Dans [ce lien](https://docs.google.com/spreadsheets/d/1x6MITsoffSq7Hs3mDIe1YLVvp
 ### Tasks
 
 - Run la pipeline evaluate "python src/main.py evaluate". Elle devrait marcher sur la task "is_comic_video"
-- Essayed d'optimiser en ajoutant / optimisant les features faites dans "make_features":
+- Essayer d'optimiser en ajoutant / optimisant les features faites dans "make_features":
     - Regarder les features disponibles dans sklearn.feature_extraction.text. Lesquelles semblent adaptées ?
     - Regarder NLTK. télécharger le corpus français. La librairie permettra de retirer les stopwords et de stemmer les mots
 - Essayer d'autres modèles (regression logistic, Bayesian, etc)

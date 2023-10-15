@@ -1,4 +1,5 @@
 import nltk
+import string
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -10,7 +11,8 @@ def preprocess_text(text):
     
     words = word_tokenize(text)
     filtered_words = [stemmer.stem(word) for word in words if word.lower() not in stop_words]
-    return ' '.join(filtered_words)
+    return ' '.join(filtered_words).translate(str.maketrans('', '', string.punctuation)) # remove punctuation
+
 
 
 def make_features(df, task):
@@ -20,11 +22,7 @@ def make_features(df, task):
 
     X = df["video_name"]
 
-    print(X.head())
-
     X = X.apply(preprocess_text)
-
-    print(X.head())
 
     return X, y
 
