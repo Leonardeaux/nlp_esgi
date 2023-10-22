@@ -1,11 +1,12 @@
 import click
 import numpy as np
 import joblib
+import pandas as pd
 from sklearn.model_selection import cross_val_score
 from data.make_dataset import make_dataset
+from data.save_prediction import save_prediction
 from features.make_features import make_features
 from model.main import make_model
-
 @click.group()
 def cli():
     pass
@@ -14,16 +15,15 @@ def cli():
 @click.command()
 @click.option("--task", help="Can be is_comic_video, is_name or find_comic_name")
 @click.option("--input_filename", default="src/data/raw/train.csv", help="File training data")
-@click.option("--model_dump_filename", help="File to dump model")
 @click.option("--model_name", default="random_forest", help="Name of the model to use")
-def train(task, input_filename, model_dump_filename, model_name):
+def train(task, input_filename, model_name):
     df = make_dataset(input_filename)
     X, y = make_features(df, task)
 
     model = make_model(model_name, task)
     model.fit(X, y)
 
-    return joblib.dump(model, model_dump_filename)
+    return joblib.dump(model, f"src/model/{model_name}.gzip")
 
 
 @click.command()
@@ -34,15 +34,11 @@ def train(task, input_filename, model_dump_filename, model_name):
 def test(task, input_filename, model_dump_filename, output_filename):
     df = make_dataset(input_filename)
 
-    X, y = make_features(df, task)
+    X, _ = make_features(df, task)
 
     model = joblib.load(model_dump_filename)
 
-    y_pred = model.predict(X)
-
-    df["prediction"] = y_pred
-
-    df.to_csv(output_filename, index=False)
+    save_prediction(model, X, df, output_filename, task)
 
 
 @click.command()

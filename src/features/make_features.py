@@ -27,13 +27,15 @@ def preprocess_text(text, remove_ponct=True):
 
 
 def make_features(df, task, remove_ponct=True):
+
     nltk.download('stopwords')
     nltk.download('punkt')
 
     if task == "is_comic_video":
+
         X = df["video_name"]
 
-        X = X.apply(preprocess_text(remove_ponct))
+        X = X.apply(lambda x: preprocess_text(x, remove_ponct))
 
         y = df["is_comic"]
 
@@ -59,15 +61,15 @@ def make_features(df, task, remove_ponct=True):
                 try:
                     target = targets[i]
                 except IndexError:
-                    continue
+                    target = 0
 
                 line.append(target)
                 data.append(line)
 
         new_df = pd.DataFrame(data, columns=['word', 'is_final_word', 'is_starting_word', 'is_capitalized', 'target'])
 
-        # X = new_df.drop(columns=['target']).to_dict(orient='records')
-        X = new_df.drop(columns=['target']).drop(columns=['is_final_word']).drop(columns=['is_starting_word']).to_dict(orient='records')
+        X = new_df.drop(columns=['target']).to_dict(orient='records')
+    
         y = new_df["target"]
 
     elif task == "find_comic_name":
@@ -77,11 +79,3 @@ def make_features(df, task, remove_ponct=True):
     
 
     return X, y
-
-# X, y = get_data(pd.read_csv("src/data/raw/train.csv"), "is_name")
-
-# print(X.head(10))
-# print(y.head(10))
-
-# print(X.count())
-# print(y.count())
