@@ -3,12 +3,16 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction import DictVectorizer
 from sklearn.pipeline import Pipeline
 
-def make_model(model_name: str):
+def make_model(model_name: str, task: str):
     pipeline_step = []
 
-    pipeline_step.append(("count_vectorizer", CountVectorizer()))
+    if task == "is_comic_video":
+        pipeline_step.append(("count_vectorizer", CountVectorizer()))
+    elif task == "is_name":
+        pipeline_step.append(("dict_vectorizer", DictVectorizer(sparse=False)))
 
     if model_name == "random_forest":
         pipeline_step.append(("random_forest", RandomForestClassifier(random_state=42)))

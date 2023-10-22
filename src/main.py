@@ -2,7 +2,6 @@ import click
 import numpy as np
 import joblib
 from sklearn.model_selection import cross_val_score
-
 from data.make_dataset import make_dataset
 from features.make_features import make_features
 from model.main import make_model
@@ -15,13 +14,13 @@ def cli():
 @click.command()
 @click.option("--task", help="Can be is_comic_video, is_name or find_comic_name")
 @click.option("--input_filename", default="src/data/raw/train.csv", help="File training data")
-@click.option("--model_dump_filename", default="src/model/random_forest.gzip", help="File to dump model")
+@click.option("--model_dump_filename", help="File to dump model")
 @click.option("--model_name", default="random_forest", help="Name of the model to use")
 def train(task, input_filename, model_dump_filename, model_name):
     df = make_dataset(input_filename)
     X, y = make_features(df, task)
 
-    model = make_model(model_name)
+    model = make_model(model_name, task)
     model.fit(X, y)
 
     return joblib.dump(model, model_dump_filename)
@@ -55,10 +54,10 @@ def evaluate(task, input_filename, model_name):
     df = make_dataset(input_filename)
 
     # Make features (tokenization, lowercase, stopwords, stemming...)
-    X, y = make_features(df, task)
+    X, y = make_features(df, task, remove_ponct=True)
 
     # Object with .fit, .predict methods
-    model = make_model(model_name)
+    model = make_model(model_name, task)
 
     # Run k-fold cross validation. Print results
     return evaluate_model(model, X, y)
