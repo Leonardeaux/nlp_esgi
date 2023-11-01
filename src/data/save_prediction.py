@@ -20,6 +20,8 @@ def save_prediction(model, X, df, output_filename, task):
             pred.append(pred_line)
 
         df["prediction"] = pred
+    elif task == "find_comic_name":
+        df["prediction"] = y_pred
     
 
     df.to_csv(output_filename, index=False)
