@@ -31,8 +31,8 @@ class CombinedModel(BaseEstimator, ClassifierMixin):
 
         cpt = 0
         is_name_pred_array = []
-        for i in range(len(X[1])):
-            words_nb = len(re.split(r"[ ']", X[1][i]))
+        for i in range(len(X[2])):
+            words_nb = len(re.split(r"[ ']", X[2][i]))
             if predictions_is_comic[i] == 1:
 
                 is_name_pred_array.append(predictions_is_name[cpt:cpt + words_nb])

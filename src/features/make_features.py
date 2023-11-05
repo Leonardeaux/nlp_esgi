@@ -87,7 +87,7 @@ def make_features(df, task, remove_ponct=True):
 
         X_is_comic, y_is_comic = make_feature_is_comic_video(df, remove_ponct)
 
-        X = (X_is_name, X_is_comic)
+        X = (X_is_name, X_is_comic, df["video_name"])
         y = (y_is_name, y_is_comic)
 
     else:
