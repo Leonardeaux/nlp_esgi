@@ -7,6 +7,9 @@ from data.make_dataset import make_dataset
 from data.save_prediction import save_prediction
 from features.make_features import make_features
 from model.main import make_model
+from utils import get_index
+
+
 @click.group()
 def cli():
     pass
@@ -52,11 +55,18 @@ def evaluate(task, input_filename, model_name):
     # Make features (tokenization, lowercase, stopwords, stemming...)
     X, y = make_features(df, task, remove_ponct=True)
 
-    # Object with .fit, .predict methods
-    model = make_model(model_name, task)
+    if task != "find_comic_name":
+        # Object with .fit, .predict methods
+        model = make_model(model_name, task)
 
-    # Run k-fold cross validation. Print results
-    return evaluate_model(model, X, y)
+        # Run k-fold cross validation. Print results
+        return evaluate_model(model, X, y)
+    else:
+        # Object with .fit, .predict methods
+        model = make_model(model_name, task)
+
+        # Run k-fold cross validation. Print results
+        return evaluate_model_for_task_3(model, X, y, df)
 
 
 def evaluate_model(model, X, y):
@@ -66,6 +76,36 @@ def evaluate_model(model, X, y):
     print(f"Got accuracy {100 * np.mean(scores)}%")
 
     return scores
+
+
+def evaluate_model_for_task_3(model, X, y, df):
+
+    model.fit(X, y)
+
+    y_pred = model.predict(X)
+
+    if len(y_pred) != len(df['comic_name']):
+        raise ValueError("Les listes de prédictions et de vrais labels doivent avoir la même longueur.")
+    
+    correct_predictions = 0
+    total_predictions = len(y_pred)
+
+    for i, row in df.iterrows():
+        true_target = get_index(row['video_name'], row['comic_name'])
+
+        try:
+            y_pred[i] = y_pred[i].tolist()
+        except:
+            pass
+
+        if y_pred[i] == true_target:
+            correct_predictions += 1
+
+    accuracy = correct_predictions / total_predictions
+
+    print(f"Got accuracy {accuracy}%")
+
+    return accuracy
 
 
 cli.add_command(train)

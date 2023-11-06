@@ -15,8 +15,6 @@ class CombinedModel(BaseEstimator, ClassifierMixin):
         self.model_is_name = make_model(f'{model_name}', "is_name")
 
     def fit(self, X, y):
-        print(X)
-        print(y)
         X_is_comic = X[1]
         y_is_comic = y[1]
         self.model_is_comic.fit(X_is_comic, y_is_comic)
